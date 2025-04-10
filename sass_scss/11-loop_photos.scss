@@ -1,9 +1,9 @@
 /* loop photos */
 
-@use 'variables' as vars;
+@use '11-photos' as photos;
 
-@each $name in vars.$list-names {
-    .#{$name} {
-        background-image: url('/images/{#name}.jpg');
+@each $name in photos.$list-names {
+    .photo-#{$name} {
+        background-image: url('/images/{#name}.jpg') no-repeat;
     }
 }
