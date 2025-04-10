@@ -1,0 +1,18 @@
+/*  more nested */
+
+$body-font-size: 14px;
+$h1-font-size: 16px;
+$h1-smaller-font-size: 12px;
+
+
+body {
+    font-size: $body-font-size;
+
+    h1 {
+        font-size: $h1-font-size;
+
+        .smaller {
+            font-size: $h1-smaller-font-size;
+        }
+    }
+}
