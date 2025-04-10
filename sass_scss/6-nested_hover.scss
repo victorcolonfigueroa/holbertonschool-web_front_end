@@ -1,0 +1,13 @@
+/* nested hover */
+
+$tdefault-color: #FF0000;
+$hover-color:#00FF00;
+
+
+button {
+    color: $defualt-color;
+
+    &:hover {
+        color: $hover-color;
+    }
+}
