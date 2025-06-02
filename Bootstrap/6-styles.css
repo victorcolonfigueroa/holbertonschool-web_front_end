@@ -1,0 +1,64 @@
+/* Custom Bootstrap overrides for Pricing Template */
+
+/* 1. Primary button color and states */
+.btn-primary {
+  background-color: #E0003C !important;
+  border-color: #E0003C !important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: #BC1340 !important;
+  border-color: #BC1340 !important;
+}
+
+/* 2. Outline primary button */
+.btn-outline-primary {
+  color: #E0003C !important;
+  border-color: #E0003C !important;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary.active,
+.show > .btn-outline-primary.dropdown-toggle {
+  color: #fff !important;
+  background-color: #E0003C !important;
+  border-color: #E0003C !important;
+}
+
+/* 3. All links use #E0003C */
+a,
+a:visited {
+  color: #E0003C !important;
+}
+a:hover,
+a:focus {
+  color: #E0003C !important;
+  text-decoration: underline;
+}
+
+/* 4. Card border and radius */
+.card,
+.card-header,
+.card-footer {
+  border-color: #E0003C !important;
+  border-radius: 1rem !important;
+}
+.card-header,
+.card-footer {
+  border-bottom-color: #E0003C !important;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+.card-footer {
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+}
+
+/* 5. Muted text color */
+.text-muted {
+  color: #8C8C8C !important;
+}
