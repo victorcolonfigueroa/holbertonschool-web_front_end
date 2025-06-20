@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task 7</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <style>
+        /* Style for the (x) cell */
+        .remove-cell {
+            background: orange;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        table {
+            margin-top: 1em;
+        }
+
+        th,
+        td {
+            padding: 0.2em 0.8em;
+        }
+
+        input,
+        select {
+            margin: 0.5em 0.2em 0.5em 0;
+            padding: 0.3em;
+        }
+
+        input[type="text"] {
+            width: 230px;
+            margin: 10px 0 10px 10px;
+            padding: 6px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 6px 18px;
+            font-size: 18px;
+        }
+
+        ul {
+            margin-top: 20px;
+        }
+
+        li {
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="application/javascript">
+        // Appends the search form and results list to the body
+        function createSearchForm() {
+            // Create form
+            var form = $('<form>').css('margin-bottom', '1em');
+            var input = $('<input type="text">'); // No id, name, or class
+            var submit = $('<input type="submit" value="Submit">');
+            form.append(input, submit);
+            // Create empty ul for results
+            var ul = $('<ul>');
+            // Append form and ul to body
+            $('body').append(form, ul);
+
+            // On submit, call queryWikipedia with input value
+            form.on('submit', function (e) {
+                e.preventDefault();
+                ul.empty(); // Clear previous results
+                var search = input.val().trim();
+                if (search.length > 0) {
+                    queryWikipedia(search);
+                }
+            });
+        }
+
+        // Adds a new article to the results list
+        function addNewArticle(id, title, snippet) {
+            var li = $('<li>');
+            // First paragraph: id - <b>title</b>
+            var p1 = $('<p>').append(
+                $('<span>').text(id + ' - '),
+                $('<b>').text(title)
+            );
+            // Second paragraph: snippet (HTML from Wikipedia)
+            var p2 = $('<p>').html(snippet); // Use .html() to render HTML
+            li.append(p1, p2);
+            // Append to the first ul in the body
+            $('ul').first().append(li);
+        }
+
+        // Queries Wikipedia API and adds results
+        function queryWikipedia(search) {
+            var data = {
+                action: 'query',
+                list: 'search',
+                srsearch: search,
+                format: 'json',
+                origin: '*'
+            };
+            $.ajax({
+                url: 'https://en.wikipedia.org/w/api.php',
+                data: data,
+                dataType: 'json',
+                success: function (response) {
+                    if (response.query && response.query.search) {
+                        response.query.search.forEach(function (result) {
+                            addNewArticle(result.pageid, result.title, result.snippet);
+                        });
+                    }
+                },
+                error: function () {
+                    // Optionally handle errors
+                    alert('Failed to fetch Wikipedia results.');
+                }
+            });
+        }
+
+        // Initialize the form on page load
+        $(document).ready(function () {
+            createSearchForm();
+        });
+    </script>
+</body>
+
+</html>

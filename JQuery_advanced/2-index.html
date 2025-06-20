@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 2</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+    </head>
+
+    <body>
+        <script type="application/javascript">
+            function createFamilyTree() {
+                // Create table element
+                const table = $('<table>');
+
+                // Create table header
+                const thead = $('<thead>');
+                const headerRow = $('<tr>');
+                headerRow.append($('<th>').text('Firstname'));
+                headerRow.append($('<th>').text('Lastname'));
+                thead.append(headerRow);
+
+                // Create table body with three rows
+                const tbody = $('<tbody>');
+
+                // First row
+                const row1 = $('<tr>');
+                row1.append($('<td>').text('Guillaume'));
+                row1.append($('<td>').text('Salva'));
+
+                // Second row
+                const row2 = $('<tr>');
+                row2.append($('<td>').text('Paulette'));
+                row2.append($('<td>').text('Salva'));
+
+                // Third row
+                const row3 = $('<tr>');
+                row3.append($('<td>').text('Antoine'));
+                row3.append($('<td>').text('Salva'));
+
+                // Append rows to tbody
+                tbody.append(row1, row2, row3);
+
+                // Append thead and tbody to table
+                table.append(thead, tbody);
+
+                // Append table to body (single append as requested)
+                $('body').append(table);
+            }
+
+            createFamilyTree();
+        </script>
+    </body>
+
+</html>

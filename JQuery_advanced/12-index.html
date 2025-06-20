@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task 12</title>
+    <!-- Import full minified jQuery for AJAX support -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <script type="application/javascript">
+        // Appends a paragraph describing the post to the body, with delete functionality
+        function addPostRow(data) {
+            var p = $('<p>').attr('id', 'row-' + data.id);
+            // (delete) span
+            var deleteSpan = $('<span>').text('(delete)').css('cursor', 'pointer').on('click', function() {
+                deletePost(data.id);
+            });
+            // Info span
+            var infoSpan = $('<span>').text(
+                'Post created with id ' + data.id + ', title: ' + data.title + ', author: ' + data.author
+            );
+            p.append(deleteSpan, infoSpan);
+            $('body').append(p);
+        }
+
+        // Lists all posts from the local json-server
+        function listPosts() {
+            $.get('http://localhost:3000/posts')
+                .done(function(response) {
+                    response.forEach(function(post) {
+                        addPostRow(post);
+                    });
+                })
+                .fail(function() {
+                    alert('Server Error');
+                });
+        }
+
+        // Builds and appends the form to the body
+        function buildForm() {
+            var form = $('<form>');
+            // Author div
+            var divAuthor = $('<div>');
+            var labelAuthor = $('<label for="author">').text('Author');
+            var inputAuthor = $('<input type="text" id="author">');
+            divAuthor.append(labelAuthor, inputAuthor);
+            // Title div
+            var divTitle = $('<div>');
+            var labelTitle = $('<label for="title">').text('Title');
+            var inputTitle = $('<textarea id="title"></textarea>');
+            divTitle.append(labelTitle, inputTitle);
+            // Submit button
+            var submit = $('<input type="submit" value="Submit">');
+            form.append(divAuthor, divTitle, submit);
+            // Append form to body
+            $('body').prepend(form);
+            // On submit, call sendForm
+            form.on('submit', function(e) {
+                e.preventDefault();
+                sendForm(form);
+            });
+        }
+
+        // Handles form submission and POSTs to the API
+        function sendForm(form) {
+            // Show message after the form
+            form.next('.about-to-send').remove(); // Remove previous message if any
+            var msg = $('<div class="about-to-send">About to send the query to the API</div>');
+            form.after(msg);
+            // Gather data
+            var data = {
+                author: form.find('#author').val(),
+                title: form.find('#title').val()
+            };
+            // POST to /posts
+            $.ajax({
+                url: 'http://localhost:3000/posts',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    addPostRow(response);
+                },
+                error: function() {
+                    alert('Error sending the POST query');
+                }
+            });
+        }
+
+        // Deletes a post by id
+        function deletePost(id) {
+            $.ajax({
+                url: 'http://localhost:3000/posts/' + id,
+                method: 'DELETE',
+                success: function() {
+                    $('#row-' + id).remove();
+                },
+                error: function() {
+                    alert('Post was not deleted');
+                }
+            });
+        }
+
+        // Call listPosts and buildForm when the page loads
+        $(document).ready(function () {
+            listPosts();
+            buildForm();
+        });
+    </script>
+</body>
+
+</html>
