@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Use js-cookie</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+  </head>
+  <body>
+    <div id="loginForm">
+      <h2>Login to the website</h2>
+      <input
+        type="text"
+        name="Firstname"
+        id="firstname"
+        placeholder="Firstname"
+      />
+      <input type="text" name="Email" id="email" placeholder="Email" />
+      <button onclick="setCookies()">Log me in</button>
+    </div>
+
+    <div id="cookies">
+      <h2>Cookies</h2>
+      <button onclick="showCookies()">Show the cookies</button>
+    </div>
+
+    <script>
+      function setCookies() {
+        const firstname = document.getElementById("firstname").value;
+        const email = document.getElementById("email").value;
+
+        // Call the new function that sets cookies and shows welcome message
+        setCookiesAndShowWelcomeMessage(firstname, email);
+      }
+
+      function setCookiesAndShowWelcomeMessage(firstname, email) {
+        // Set cookies using js-cookie set function with 10 days expiration
+        Cookies.set("firstname", firstname, { expires: 10 });
+        Cookies.set("email", email, { expires: 10 });
+
+        // Show welcome message after setting cookies
+        showWelcomeMessageOrForm();
+      }
+
+      function showCookies() {
+        const cookies = document.cookie;
+
+        const p = document.createElement("p");
+        p.textContent = `Email: ${Cookies.get(
+          "email"
+        )} - Firstname: ${Cookies.get("firstname")}`;
+        document.getElementById("cookies").appendChild(p);
+      }
+
+      function showForm() {
+        // Remove the Welcome message if it exists
+        const existingWelcome = document.getElementById("welcomeMessage");
+        if (existingWelcome) {
+          existingWelcome.remove();
+        }
+
+        const loginForm = document.getElementById("loginForm");
+        loginForm.style.display = "block";
+        const cookies = document.getElementById("cookies");
+        cookies.style.display = "block";
+      }
+
+      function hideForm() {
+        const loginForm = document.getElementById("loginForm");
+        loginForm.style.display = "none";
+      }
+
+      function deleteCookiesAndShowForm() {
+        // Delete cookies using js-cookie remove function
+        Cookies.remove("firstname");
+        Cookies.remove("email");
+
+        // Show the form by calling showForm function
+        showForm();
+      }
+
+      function showWelcomeMessageOrForm() {
+        const firstname = Cookies.get("firstname");
+        const email = Cookies.get("email");
+
+        if (firstname && email) {
+          // Hide the form
+          hideForm();
+
+          // Remove existing content and create welcome message
+          const cookies = document.getElementById("cookies");
+          cookies.style.display = "none";
+
+          const welcomeMessage = document.createElement("h1");
+          welcomeMessage.id = "welcomeMessage";
+          welcomeMessage.textContent = `Welcome: ${firstname} `;
+
+          const logoutLink = document.createElement("a");
+          logoutLink.textContent = "(logout)";
+          logoutLink.style.fontWeight = "normal";
+          logoutLink.style.fontStyle = "italic";
+          logoutLink.style.marginLeft = "10px";
+          logoutLink.style.textDecoration = "none";
+          logoutLink.style.color = "inherit";
+          logoutLink.style.cursor = "pointer";
+          logoutLink.addEventListener("click", deleteCookiesAndShowForm);
+
+          welcomeMessage.appendChild(logoutLink);
+          document.body.appendChild(welcomeMessage);
+        } else {
+          showForm();
+        }
+      }
+
+      // Check initial state when page loads
+      showWelcomeMessageOrForm();
+    </script>
+  </body>
+</html>

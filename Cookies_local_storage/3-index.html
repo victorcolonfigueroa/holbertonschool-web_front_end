@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delete cookie and mini application</title>
+  </head>
+  <body>
+    <div id="loginForm">
+      <h2>Login to the website</h2>
+      <input
+        type="text"
+        name="Firstname"
+        id="firstname"
+        placeholder="Firstname"
+      />
+      <input type="text" name="Email" id="email" placeholder="Email" />
+      <button onclick="setCookies()">Log me in</button>
+    </div>
+
+    <div id="cookies">
+      <h2>Cookies</h2>
+      <button onclick="showCookies()">Show the cookies</button>
+    </div>
+
+    <script>
+      function setCookies() {
+        const firstname = document.getElementById("firstname").value;
+        const email = document.getElementById("email").value;
+
+        // set the expiration date to 10 days from now
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 10);
+
+        document.cookie = `firstname=${firstname}; expires=${expirationDate.toUTCString()}; path=/`;
+        document.cookie = `email=${email}; expires=${expirationDate.toUTCString()}; path=/`;
+
+        // Show welcome message after setting cookies
+        showWelcomeMessageOrForm();
+      }
+
+      function showCookies() {
+        const cookies = document.cookie;
+
+        const p = document.createElement("p");
+        p.textContent = `Email: ${getCookie("email")} - Firstname: ${getCookie(
+          "firstname"
+        )}`;
+        document.getElementById("cookies").appendChild(p);
+      }
+
+      function getCookie(name) {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split("; ");
+        const cookie = cookieArray.find((cookie) => cookie.includes(name));
+        return cookie ? cookie.split("=")[1] : "";
+      }
+
+      function showForm() {
+        // Remove the Welcome message if it exists
+        const existingWelcome = document.getElementById("welcomeMessage");
+        if (existingWelcome) {
+          existingWelcome.remove();
+        }
+
+        const loginForm = document.getElementById("loginForm");
+        loginForm.style.display = "block";
+        const cookies = document.getElementById("cookies");
+        cookies.style.display = "block";
+      }
+
+      function hideForm() {
+        const loginForm = document.getElementById("loginForm");
+        loginForm.style.display = "none";
+      }
+
+      function deleteCookiesAndShowForm() {
+        // Delete cookies by setting them with expired date
+        document.cookie =
+          "firstname=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie =
+          "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        // Show the form by calling showForm function
+        showForm();
+      }
+
+      function showWelcomeMessageOrForm() {
+        const firstname = getCookie("firstname");
+        const email = getCookie("email");
+
+        if (firstname && email) {
+          // Hide the form
+          hideForm();
+
+          // Remove existing content and create welcome message
+          const cookies = document.getElementById("cookies");
+          cookies.style.display = "none";
+
+          const welcomeMessage = document.createElement("h1");
+          welcomeMessage.id = "welcomeMessage";
+          welcomeMessage.textContent = `Welcome: ${firstname} `;
+
+          const logoutLink = document.createElement("a");
+          logoutLink.textContent = "(logout)";
+          logoutLink.style.fontWeight = "normal";
+          logoutLink.style.fontStyle = "italic";
+          logoutLink.style.marginLeft = "10px";
+          logoutLink.style.textDecoration = "none";
+          logoutLink.style.color = "inherit";
+          logoutLink.style.cursor = "pointer";
+          logoutLink.addEventListener("click", deleteCookiesAndShowForm);
+
+          welcomeMessage.appendChild(logoutLink);
+          document.body.appendChild(welcomeMessage);
+        } else {
+          showForm();
+        }
+      }
+
+      // Check initial state when page loads
+      showWelcomeMessageOrForm();
+    </script>
+  </body>
+</html>
